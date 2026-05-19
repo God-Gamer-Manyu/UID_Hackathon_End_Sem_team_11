@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TechNova 2026 | Feedback</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        
+
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="events.html">Events</a>
+        <a href="feedback.html">Feedback</a>
+    </nav>
+
+    <div class="banner">
+        <h1>TechNova 2026</h1>
+        <p>Innovate. Create. Dominate.</p>
+    </div>
+
+    <!-- Feedback Form -->
+    <div class="feedback-container">
+        <h2>Event Feedback Form</h2>
+
+        <form id="feedbackForm">
+
+            <label>Student Name</label>
+            <input type="text" id="studentName" required>
+
+            <label>Registration Number</label>
+            <input type="text" id="regNumber" required placeholder="CS.BC.A1CSE12345">
+
+            <label>Event Name</label>
+            <select id="eventName" required>
+                <option value="">Select Event</option>
+            </select>
+
+            <label>Rating</label>
+
+            <div class="star-rating">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+
+            <input type="hidden" id="ratingValue" required>
+
+            <label>Comments</label>
+            <textarea id="comments" rows="5" placeholder="Write your feedback... (min 20 chars)" minlength="20" required></textarea>
+
+            <button type="submit">Submit Feedback</button>
+
+        </form>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h2>Feedback Submitted ✅</h2>
+
+            <p id="averageRating"></p>
+            <p id="feedbackSummary"></p>
+
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <footer class="footer"></footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

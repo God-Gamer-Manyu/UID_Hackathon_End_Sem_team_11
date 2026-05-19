@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style2.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body class="events_body">
+        
+        <header>
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="events.html">Events</a>
+                <a href="feedback.html">Feedback</a>
+            </nav>
+        </header>
+
+        <div class="events_cards"></div>
+        <footer class="footer"></footer>
+
+        <script src="script.js"></script>
+        
+        <script>
+            const eventsContainer = document.querySelector(".events_cards");
+
+            /**
+             * Creates a subtitle with animated words
+             */
+
+            function createSubtitle(
+            container,
+            {
+                text = [],
+                eventID = null,
+                eventMembers = {},
+                eventRegistrationCount = {},
+                afterRender = () => {}
+            }
+            ) {
+
+            container.innerHTML = "";
+
+            // Ensure array
+            const lines = Array.isArray(text)
+                ? text
+                : text.split("\n");
+
+            // Render event info
+            lines.forEach((line) => {
+
+                if (!line.trim()) return;
+
+                const row = document.createElement("div");
+
+                row.className = "card-subtitle-line";
+                row.textContent = line;
+
+                container.appendChild(row);
+            });
+
+            // Registration info
+            if (eventID) {
+
+                const members = eventMembers[eventID] || [];
+                const count = eventRegistrationCount[eventID] || 0;
+
+                const regDiv = document.createElement("div");
+                regDiv.className = "card-subtitle-line";
+                regDiv.textContent = `Participations: ${count}`;
+
+                container.appendChild(regDiv);
+
+                const namesDiv = document.createElement("div");
+                namesDiv.className = "card-subtitle-line";
+
+                if (members.length === 0) {
+
+                namesDiv.textContent = "No registrations";
+
+                } else {
+
+                const names = members
+                    .slice(0, 4)
+                    .map(member => member.studentName);
+
+                namesDiv.textContent =
+                    `Names: ${names.join(", ")}`;
+
+                if (members.length > 4) {
+                    namesDiv.textContent += " ...";
+                }
+                }
+
+                container.appendChild(namesDiv);
+            }
+
+            afterRender(container);
+            }
+
+            let eventMembers = {};
+            let eventRegistrationCount = {};
+
+            // const events = {
+            //     "E1": {
+            //         name: "Hackathon",
+            //         category: "Tech",
+            //         date: "2026-06-20",
+            //         time: "15:00",
+            //         venue: "Sample Venue",
+            //         fee: "10",
+            //         status: "Closed",
+            //         caption: "Build something amazing"
+            //     },
+
+            //     "E2": {
+            //         name: "Gaming Tournament",
+            //         category: "Gaming",
+            //         date: "2026-07-10",
+            //         time: "18:00",
+            //         venue: "Arena Hall",
+            //         fee: "20",
+            //         status: "Open",
+            //         caption: "Compete with the best"
+            //     },
+
+            //     "E3": {
+            //     name: "AI Workshop",
+            //     category: "Workshop",
+            //     date: "2026-08-05",
+            //     time: "11:00",
+            //     venue: "Innovation Lab",
+            //     fee: "15",
+            //     status: "Open",
+            //     caption: "Learn and build with AI"
+            // },
+
+            // "E4": {
+            //     name: "Startup Pitch Fest",
+            //     category: "Business",
+            //     date: "2026-09-12",
+            //     time: "14:30",
+            //     venue: "Main Auditorium",
+            //     fee: "25",
+            //     status: "Open",
+            //     caption: "Pitch your next big idea"
+            // },
+
+            // "E5": {
+            //     name: "Cyber Security Challenge",
+            //     category: "Security",
+            //     date: "2026-10-18",
+            //     time: "10:00",
+            //     venue: "Tech Block B",
+            //     fee: "30",
+            //     status: "Closed",
+            //     caption: "Test your hacking defense skills"
+            // }
+
+            // };
+
+
+            Object.entries(events).forEach(([eventID, event]) => {
+
+                // Initialize arrays
+                eventMembers[eventID] = [];
+                eventRegistrationCount[eventID] = 0;
+
+                // Create Card
+                const card = document.createElement("div");
+                card.className = "card";
+
+                // Card content
+                const cardContent = document.createElement("div");
+                cardContent.className = "card-content";
+
+                // Title
+                const title = document.createElement("h3");
+                title.className = "card-title";
+                title.textContent = event.name;
+
+                // Subtitle
+                const subtitle = document.createElement("div");
+                subtitle.className = "card-subtitle";
+
+                // Icon
+                const icon = document.createElement("i");
+                icon.className = "fa-solid fa-hat-witch card-icon";
+
+                // Append structure
+                cardContent.appendChild(title);
+                cardContent.appendChild(subtitle);
+
+                card.appendChild(cardContent);
+                card.appendChild(icon);
+
+                eventsContainer.appendChild(card);
+
+                // Subtitle text
+                const subtitleText = [
+                `Category: ${event.category}`,
+                `Date: ${event.date}`,
+                `Time: ${event.time}`,
+                `Venue: ${event.venue}`,
+                `Fee: ${event.fee}`,
+                `Status: ${event.status}`,
+                `Caption: ${event.caption}`
+                ];
+
+                // Create animated subtitle
+                createSubtitle(subtitle, {
+
+                    text: subtitleText,
+
+                    eventID: eventID,
+                    eventMembers: eventMembers,
+                    eventRegistrationCount: eventRegistrationCount,
+
+                    wordHook: (word, index) => {
+                        // Optional animation customization
+                    },
+
+                    afterRender: (container) => {
+
+                        if (event.status.toLowerCase() !== 'open') return;
+
+                        const button = document.createElement("button");
+
+                        button.textContent = "Register";
+                        button.className = "register-button";
+
+                        button.addEventListener("click", () => {
+
+                            Swal.fire({
+                                title: `Register for ${event.name}`,
+                                focusConfirm: false,
+                                showCancelButton: true,
+                                confirmButtonText: 'Next',
+
+                                html: `
+                                    <input id="studentName" class="swal2-input" placeholder="Student Name">
+
+                                    <input id="studentEmail" class="swal2-input" placeholder="Student Email ID">
+
+                                    <input id="regNumber" class="swal2-input" placeholder="Registration Number">
+
+                                    <input id="mobileNumber" class="swal2-input" placeholder="Mobile Number">
+
+                                    <input id="teamName" class="swal2-input" placeholder="Team Name">
+
+                                    <input id="teamSize" type="number" class="swal2-input" placeholder="Team Size">
+
+                                    <select id="participationType" class="swal2-select">
+                                        <option value="">Select Participation Type</option>
+                                        <option value="Individual">Individual</option>
+                                        <option value="Team">Team</option>
+                                    </select>
+                                `,
+
+                                preConfirm: () => {
+
+                                    let formData = {
+                                        studentName: document.getElementById('studentName').value.trim(),
+                                        studentEmail: document.getElementById('studentEmail').value.trim(),
+                                        regNumber: document.getElementById('regNumber').value.trim(),
+                                        mobileNumber: document.getElementById('mobileNumber').value.trim(),
+                                        teamName: document.getElementById('teamName').value.trim(),
+                                        teamSize: document.getElementById('teamSize').value.trim(),
+                                        participationType: document.getElementById('participationType').value
+                                    };
+
+                                    if (
+                                        !formData.studentName ||
+                                        !formData.studentEmail ||
+                                        !formData.regNumber ||
+                                        !formData.mobileNumber ||
+                                        !formData.participationType
+                                    ) {
+                                        Swal.showValidationMessage('Please fill all required fields');
+                                        return false;
+                                    }
+
+                                    return formData;
+                                }
+
+                            }).then((result) => {
+
+                                if (result.isConfirmed) {
+
+                                    let myOut = {
+                                        EventID: eventID,
+                                        EventName: event.name,
+                                        ...result.value
+                                    };
+
+                                    eventMembers[eventID].push(myOut);
+                                    eventRegistrationCount[eventID]++;
+
+                                    console.log("Registered User:", myOut);
+                                    Swal.fire({
+                                        title: "Good job!",
+                                        text: "Succcessfully registered!",
+                                        icon: "success"
+                                        });
+
+                                    // Re-render subtitle after registration
+                                    createSubtitle(subtitle, {
+                                        text: subtitleText,
+                                        eventID,
+                                        eventMembers,
+                                        eventRegistrationCount,
+
+                                        afterRender: (container) => {
+                                            container.appendChild(button);
+                                        }
+                                    });
+                                }
+
+                            });
+
+                        });
+
+                        container.appendChild(button);
+                    }
+                });
+            });
+
+        </script>
+    </body>
+</html>
